@@ -3,4 +3,4 @@ A simple resopnsive web application for taking notes.
 
 ## Live Version
 
-[Keep Notes !](https://www.test.com)
+[k-notes.netlify.app](https://k-notes.netlify.app/)
