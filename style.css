@@ -15,6 +15,7 @@ body {
   align-items: center;
   background-color: white;
   width: 100%;
+  height: 100%;
 }
 
 h1 {
@@ -78,23 +79,21 @@ h1 {
   /* display: none; */
 
   z-index: 5;
-  position: absolute;
+  position: fixed;
+  width: 100%;
+  overflow: auto; /* for scrolling */
+  height: 100%;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100vh;
   background-color: rgba(0, 0, 0, 0.685);
 }
 
 .note {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
   z-index: 10;
-  transform: translate(5%, 5%);
+  /* transform: translate(5%, 20%); */
+  margin: 35% auto;
   width: 90%;
-  height: 90vh;
+  height: 60vh;
   background-color: white;
   border-radius: 10px;
   box-shadow: 1px 1px 10px rgb(36, 36, 36);
@@ -111,14 +110,11 @@ h1 {
   }
   100% {
     opacity: 1;
-    width: 90%;
-    height: 90vh;
   }
 }
 
 .hide {
   display: none;
-  animation: note-close 0.25s linear forwards;
 }
 
 .edit {
@@ -155,6 +151,14 @@ p {
   height: 50%;
 }
 
+.dragging {
+  border: 2px solid black;
+  cursor: pointer;
+  font-weight: bold;
+  /* -webkit-user-drag: none;
+  -moz-user-drag: none; */
+}
+
 @media only screen and (min-width: 800px) {
   .cards {
     grid-template-columns: repeat(3, 1fr);
@@ -164,6 +168,10 @@ p {
   }
   .add-bt {
     margin-right: 50px;
+  }
+  .note {
+    width: 50%;
+    margin: 10% auto;
   }
 }
 
