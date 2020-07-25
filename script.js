@@ -127,35 +127,4 @@ function cardDragEventsHandler(card) {
   card.addEventListener("dragstart", () => dragStart(card));
   card.addEventListener("dragend", () => dragEnd(card));
   card.addEventListener("dragover", (e) => dragOver(e, card));
-  // card.addEventListener("touchstart", () => dragStart(card));
-  // card.addEventListener("touchend", () => dragEnd(card));
-  // card.addEventListener("touchmove", (e) => dragOver(e, card));
 }
-
-// cardsContainer.addEventListener('dragover', e =>{
-//   e.preventDefault();
-//   const draggable = document.querySelector('.dragging');
-//   const cardAfter = getClosestCard(e.clientX,e.clientY);
-//   if(typeof cardAfter.elm != 'undefined'){
-//     cardsContainer.insertBefore(draggable,cardAfter.elm);
-//   }
-//   else{
-//     cardsContainer.appendChild(draggable);
-//   }
-
-// });
-
-// function getClosestCard(x,y){
-
-//   const cards = document.querySelectorAll('.card');
-//   let closest = {x: Number.NEGATIVE_INFINITY, y: Number.POSITIVE_INFINITY};
-//   for(card of cards){
-//      const boundries = card.getBoundingClientRect();
-//      const offset = {x: x - boundries.left - boundries.width / 2 ,  y: Math.abs(y - boundries.top - boundries.height / 2) };
-//      if(offset.x < 0 && offset.y < closest.y && offset.x >= closest.x){
-//        closest = {offset : offset , elm:card};
-//      }
-//   }
-//   console.log(closest.offset)
-//   return closest
-// }

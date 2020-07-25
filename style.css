@@ -76,8 +76,6 @@ h1 {
 }
 
 .overlay {
-  /* display: none; */
-
   z-index: 5;
   position: fixed;
   width: 100%;
@@ -90,7 +88,6 @@ h1 {
 
 .note {
   z-index: 10;
-  /* transform: translate(5%, 20%); */
   margin: 35% auto;
   width: 90%;
   height: 60vh;
@@ -141,7 +138,6 @@ textarea {
   border-top: 1px solid grey;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  /* overflow: scroll; */
 }
 p {
   word-break: break-all;
@@ -155,8 +151,6 @@ p {
   border: 2px solid black;
   cursor: pointer;
   font-weight: bold;
-  /* -webkit-user-drag: none;
-  -moz-user-drag: none; */
 }
 
 @media only screen and (min-width: 800px) {
