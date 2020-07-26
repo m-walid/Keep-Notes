@@ -9,50 +9,50 @@ const cancelBt = document.querySelector(".cancel-bt");
 let openCardText = false;
 
 loadFromStorage();
+eventsHandler();
 
-cards.forEach((card) => {
-  cardDragEventsHandler(card);
-  card.addEventListener("click", openNote)
-});
-
-
-
-saveBt.addEventListener("click", saveChanges);
-cancelBt.addEventListener("click", closeOverlay);
-addBt.addEventListener("click", openOverlay);
-
-
+function eventsHandler() {
+  saveBt.addEventListener("click", saveChanges);
+  cancelBt.addEventListener("click", closeOverlay);
+  addBt.addEventListener("click", openOverlay);
+}
 
 function removeCardEvent(e) {
-  e.target.parentElement.remove();
+  e.stopPropagation();
+  this.parentElement.remove();
   savetoStorage();
 }
 
+function openNote() {
+  const cardText = this.querySelector("p");
+  openCardText = cardText;
+  openOverlay();
+  noteText.value = cardText.innerText;
+}
 
-function openNote(e) {
-  if (e.target.classList.contains("remove")) {
-    removeCardEvent(e);
-  } else {
-    const cardText = e.target.classList.contains("card") //gets the card text if either the target was the p element or the card div
-      ? e.target.querySelector("p")
-      : e.target;
-    openCardText = cardText;
-    openOverlay();
-    noteText.value = cardText.innerText;
-  }
+function createNoteCard(text) {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  card.setAttribute("draggable", "true");
+  const removeBt = document.createElement("i");
+  removeBt.classList.add("fa", "fa-trash", "remove");
+  removeBt.addEventListener("click", removeCardEvent);
+  card.appendChild(removeBt);
+  const p = document.createElement("p");
+  p.textContent = text;
+  card.appendChild(p);
+  card.addEventListener("click", openNote);
+  cardDragEventsHandler(card);
+  return card;
 }
 
 function saveChanges() {
-  if (openCardText === false) { // if there's no card open then add a new card 
-    const card = document.createElement("div");
-    card.addEventListener("click", openNote);
-    cardDragEventsHandler(card);
-    card.classList.add("card");
-    card.setAttribute("draggable", "true");
-    card.innerHTML = `<i class="fa fa-trash remove" aria-hidden="true"></i>
-      <p>${noteText.value}</p>`;
+  if (openCardText === false) {
+    // if there's no card open then add a new card
+    const card = createNoteCard(noteText.value);
     cardsContainer.insertBefore(card, cardsContainer.firstElementChild);
-  } else { //save the changes in the opened card
+  } else {
+    //save the changes in the opened card
     openCardText.innerText = noteText.value;
   }
   savetoStorage();
@@ -74,7 +74,6 @@ function closeOverlay() {
   noteText.value = "";
 }
 
-
 function openOverlay() {
   note.style.opacity = 1;
   overlay.style.opacity = 1;
@@ -93,15 +92,11 @@ function loadFromStorage() {
     cardsContainer.innerHTML = "";
     const notes = JSON.parse(localStorage.getItem("notes"));
     notes.forEach((note) => {
-      const card = document.createElement("div");
-      card.addEventListener("click", openNote);
-      cardDragEventsHandler(card);
-      card.classList.add("card");
-      card.setAttribute("draggable", "true");
-      card.innerHTML = `<i class="fa fa-trash remove" aria-hidden="true"></i>
-      <p>${note}</p>`;
+      const card = createNoteCard(note);
       cardsContainer.appendChild(card);
     });
+  } else {
+    cardsContainer.appendChild(createNoteCard("Hello !"));
   }
 }
 
@@ -112,13 +107,11 @@ function dragStart(card) {
   }, 1);
 }
 
-
 function dragEnd(card) {
   card.classList.remove("dragging");
   card.style.opacity = "1";
   savetoStorage();
 }
-
 
 function dragOver(e, card) {
   e.preventDefault();
@@ -131,9 +124,6 @@ function dragOver(e, card) {
     cardsContainer.insertBefore(draggable, card);
   }
 }
-
-
-
 
 function cardDragEventsHandler(card) {
   card.addEventListener("dragstart", () => dragStart(card));
