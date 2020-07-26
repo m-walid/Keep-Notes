@@ -7,16 +7,33 @@ const overlay = document.querySelector(".overlay");
 const saveBt = document.querySelector(".save-bt");
 const cancelBt = document.querySelector(".cancel-bt");
 let openCardText = false;
+
+loadFromStorage();
+
+cards.forEach((card) => {
+  cardDragEventsHandler(card);
+  card.addEventListener("click", openNote)
+});
+
+
+
+saveBt.addEventListener("click", saveChanges);
+cancelBt.addEventListener("click", closeOverlay);
+addBt.addEventListener("click", openOverlay);
+
+
+
 function removeCardEvent(e) {
   e.target.parentElement.remove();
   savetoStorage();
 }
 
+
 function openNote(e) {
   if (e.target.classList.contains("remove")) {
     removeCardEvent(e);
   } else {
-    const cardText = e.target.classList.contains("card")
+    const cardText = e.target.classList.contains("card") //gets the card text if either the target was the p element or the card div
       ? e.target.querySelector("p")
       : e.target;
     openCardText = cardText;
@@ -26,7 +43,7 @@ function openNote(e) {
 }
 
 function saveChanges() {
-  if (openCardText === false) {
+  if (openCardText === false) { // if there's no card open then add a new card 
     const card = document.createElement("div");
     card.addEventListener("click", openNote);
     cardDragEventsHandler(card);
@@ -35,7 +52,7 @@ function saveChanges() {
     card.innerHTML = `<i class="fa fa-trash remove" aria-hidden="true"></i>
       <p>${noteText.value}</p>`;
     cardsContainer.insertBefore(card, cardsContainer.firstElementChild);
-  } else {
+  } else { //save the changes in the opened card
     openCardText.innerText = noteText.value;
   }
   savetoStorage();
@@ -45,17 +62,19 @@ function saveChanges() {
 function closeOverlay() {
   const hide = setInterval(() => {
     if (note.style.opacity > 0) {
-      note.style.opacity = Number(note.style.opacity) - 0.01;
-      overlay.style.opacity = Number(overlay.style.opacity) - 0.01;
+      note.style.opacity = Number(note.style.opacity) - 0.03;
+      overlay.style.opacity = Number(overlay.style.opacity) - 0.03;
     } else {
       overlay.classList.add("hide");
       clearInterval(hide);
     }
-  }, 3);
+  }, 1);
 
   openCardText = false;
   noteText.value = "";
 }
+
+
 function openOverlay() {
   note.style.opacity = 1;
   overlay.style.opacity = 1;
@@ -86,15 +105,6 @@ function loadFromStorage() {
   }
 }
 
-saveBt.addEventListener("click", saveChanges);
-
-cancelBt.addEventListener("click", closeOverlay);
-addBt.addEventListener("click", openOverlay);
-
-cards.forEach((card) => card.addEventListener("click", openNote));
-
-loadFromStorage();
-
 function dragStart(card) {
   card.classList.add("dragging");
   setTimeout(() => {
@@ -102,11 +112,13 @@ function dragStart(card) {
   }, 1);
 }
 
+
 function dragEnd(card) {
   card.classList.remove("dragging");
   card.style.opacity = "1";
   savetoStorage();
 }
+
 
 function dragOver(e, card) {
   e.preventDefault();
@@ -119,9 +131,9 @@ function dragOver(e, card) {
     cardsContainer.insertBefore(draggable, card);
   }
 }
-cards.forEach((card) => {
-  cardDragEventsHandler(card);
-});
+
+
+
 
 function cardDragEventsHandler(card) {
   card.addEventListener("dragstart", () => dragStart(card));
